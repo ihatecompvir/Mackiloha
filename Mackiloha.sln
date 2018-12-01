@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GLTFTools", "GLTFTools\GLTF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boom", "Boom\Boom.csproj", "{37D0BE92-0C3C-4750-A379-727ECA7F79F2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GemToolkit", "GemToolkit\GemToolkit.csproj", "{306C83B5-0255-4FD5-B042-818691B48A42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{37D0BE92-0C3C-4750-A379-727ECA7F79F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37D0BE92-0C3C-4750-A379-727ECA7F79F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37D0BE92-0C3C-4750-A379-727ECA7F79F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{306C83B5-0255-4FD5-B042-818691B48A42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{306C83B5-0255-4FD5-B042-818691B48A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{306C83B5-0255-4FD5-B042-818691B48A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{306C83B5-0255-4FD5-B042-818691B48A42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
