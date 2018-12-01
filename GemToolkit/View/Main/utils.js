@@ -1,5 +1,6 @@
 var path = require('path')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
+//var ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 exports.cssLoaders = function (options) {
   options = options || {}
@@ -25,20 +26,17 @@ exports.cssLoaders = function (options) {
     // Extract CSS when that option is specified
     // (which is the case during production build)
     if (options.extract) {
-      return ExtractTextPlugin.extract({
-        use: sourceLoader,
-        fallback: 'vue-style-loader'
-      })
+      return [{ loader: MiniCssExtractPlugin.loader }].concat(sourceLoader)
     } else {
       return ['vue-style-loader'].concat(sourceLoader)
     }
   }
-
+  
   // http://vuejs.github.io/vue-loader/en/configurations/extract-css.html
   return {
     css: generateLoaders(),
     postcss: generateLoaders(),
-    less: generateLoaders('less'),
+    //less: generateLoaders('less'),
     sass: generateLoaders('sass?indentedSyntax'),
     scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),

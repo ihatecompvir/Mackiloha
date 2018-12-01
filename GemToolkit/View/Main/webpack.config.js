@@ -1,40 +1,32 @@
 var path = require('path')
 var webpack = require('webpack')
 var utils = require('./utils')
-var ExtractTextPlugin = require("extract-text-webpack-plugin")
-const BabiliPlugin = require("babili-webpack-plugin")
+
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
+
+const analyze = process.env.ANALYZE === true || process.env.ANALYZE === 'true'
 
 var output = {
   path: path.resolve(__dirname, './dist'),
-  filename: 'build.js'
-};
-
-var resolve = (p) => path.resolve(__dirname, p);
-
-var cssOptionLoader;
-
-if (process.env.NODE_ENV !== 'production') {
-  cssOptionLoader = { sourceMap: false }
-  output.publicPath = 'dist/'
-} else {
-  cssOptionLoader = { sourceMap: true, extract: true }
+  filename: '[name].js'
 }
 
+var resolve = (p) => path.resolve(__dirname, p)
+
 var webpackOptions = {
+  mode: 'development',
   output: output,
   module: {
     rules: [
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          loaders: utils.cssLoaders(cssOptionLoader),
-          postcss: [
-            require('autoprefixer')({
-              browsers: ['last 2 versions']
-            })
-          ]
-        }
+        loader: 'vue-loader'
       },
       {
         test: /\.js$/,
@@ -43,11 +35,19 @@ var webpackOptions = {
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'url-loader?limit=10000'
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]?[hash]'
+        }
       },
       {
-        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader: 'url-loader?limit=10000'
+        // Match woff2 in addition to patterns like .woff?v=1.1.1.
+        test: /\.(woff|woff2|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "file-loader",
+        options: {
+          limit: 50000,
+          name: './fonts/[name].[ext]'
+        }
       },
       {
         test: /\.json$/,
@@ -58,20 +58,19 @@ var webpackOptions = {
         loader: 'raw-loader'
       },
       {
-        test: /\.html$/,
-        loader: 'vue-html-loader'
+        test: /\.styl(us)?$/,
+        loader: ['style-loader', 'css-loader', 'stylus-loader']
       },
       {
-        test: /\.styl$/,
-        loader: ['style-loader', 'css-loader', 'stylus-loader', {
-          loader: 'vuetify-loader'
-        }]
+        test: /\.html$/,
+        loader: 'html-loader'
       }
     ]
   },
   devServer: {
     historyApiFallback: true,
-    noInfo: true
+    noInfo: true,
+    overlay: true
   },
   resolve: {
     extensions: ['.js', '.vue', '.json', '.css', '.cjson'],
@@ -82,20 +81,32 @@ var webpackOptions = {
     }
   },
   plugins: [
-    new ExtractTextPlugin('styles.css')
+    new VueLoaderPlugin(),
+    new VuetifyLoaderPlugin()
   ],
   devtool: 'source-map',
+  optimization: {
+    concatenateModules: true,
+    splitChunks: {
+      cacheGroups: {
+        default: false,
+        vendors: false
+      }
+    }
+  }
 }
 
-var buildMode = false;
+var buildMode = false
 switch (process.env.NODE_ENV) {
   case 'production':
+    webpackOptions.mode = 'production'
+
     buildMode = true
     webpackOptions.externals = {
       'vue': 'Vue',
       'vueHelper': 'glueHelper'
     }
-    webpackOptions.entry = './src/entry.js';
+    webpackOptions.entry = { main: './src/entry.js' }
 
     webpackOptions.devtool = '#cheap-source-map'
     // http://vue-loader.vuejs.org/en/workflow/production.html
@@ -106,38 +117,46 @@ switch (process.env.NODE_ENV) {
         }
       }),
       new webpack.optimize.ModuleConcatenationPlugin(),
-      new BabiliPlugin({}, { comments: false }),
+      new MiniCssExtractPlugin({
+        filename: '[name].css',
+        chunkFilename: '[name].css'
+      }),
       new webpack.LoaderOptionsPlugin({
         minimize: true
       })
     ])
-    break;
+    break
 
   case 'development':
     webpackOptions.plugins = (webpackOptions.plugins || []).concat([
       new webpack.HotModuleReplacementPlugin()
-    ]);
+    ])
 
     webpackOptions.resolve.alias = {
       'vue$': 'vue/dist/vue'
     }
-    webpackOptions.entry = './src/main.js';
-    break;
-
+    webpackOptions.entry = { main: './src/main.js' }
+    break
   case 'integrated':
     webpackOptions.plugins = (webpackOptions.plugins || []).concat([
       new webpack.HotModuleReplacementPlugin()
-    ]);
+    ])
 
     webpackOptions.externals = {
       'vue': 'Vue',
       'vueHelper': 'glueHelper'
     }
-    webpackOptions.entry = './src/integrated.js';
-    break;
+    webpackOptions.entry = { main: './src/integrated.js' }
+    break
 }
 
-const styleOption = buildMode ? { sourceMap: true, extract: true } : { sourceMap: true };
+const styleOption = buildMode ? { sourceMap: true, extract: true } : { sourceMap: true }
 webpackOptions.module.rules = webpackOptions.module.rules.concat(utils.styleLoaders(styleOption))
+
+if (analyze) {
+  webpackOptions.plugins = (webpackOptions.plugins || []).concat([
+    new BundleAnalyzerPlugin()
+  ])
+}
 
 module.exports = webpackOptions

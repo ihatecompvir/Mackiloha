@@ -152,9 +152,8 @@
     </None>
     <AppDesigner Include="Properties\" />
     <None Include="View\Main\.babelrc" />
+    <None Include="View\Main\.editorconfig" />
     <None Include="View\Main\data\vm.cjson" />
-    <Resource Include="View\Main\dist\styles.css.map" />
-    <Resource Include="View\Main\dist\build.js.map" />
     <None Include="View\Main\package-lock.json" />
     <None Include="View\Main\package.json" />
     <None Include="View\Main\README.md" />
@@ -170,10 +169,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="View\Main\.gitignore" />
-    <Resource Include="View\Main\dist\810a1b930979de83478be0f458b51dd8.png" />
-    <Resource Include="View\Main\dist\build.js" />
-    <Resource Include="View\Main\dist\index.html" />
-    <Resource Include="View\Main\dist\styles.css" />
+    <Content Include="View\Main\dist\index.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="View\Main\dist\logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="View\Main\dist\main.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="View\Main\dist\main.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="View\Main\index.html" />
     <Resource Include="View\Main\src\assets\logo.png" />
     <Content Include="View\Main\src\entry.js" />
