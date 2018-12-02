@@ -128,6 +128,8 @@ switch (process.env.NODE_ENV) {
     break
 
   case 'development':
+    webpackOptions.output.publicPath = 'dist/'
+
     webpackOptions.plugins = (webpackOptions.plugins || []).concat([
       new webpack.HotModuleReplacementPlugin()
     ])
@@ -138,6 +140,8 @@ switch (process.env.NODE_ENV) {
     webpackOptions.entry = { main: './src/main.js' }
     break
   case 'integrated':
+    webpackOptions.output.publicPath = 'dist/'
+
     webpackOptions.plugins = (webpackOptions.plugins || []).concat([
       new webpack.HotModuleReplacementPlugin()
     ])
