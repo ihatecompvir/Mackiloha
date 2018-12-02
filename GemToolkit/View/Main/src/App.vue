@@ -1,13 +1,34 @@
 <template>
   <v-app dark>
     <v-content app>
-      <v-layout>
-        <v-flex sm12 text-xs-center pa-0 ma-0>
-          <v-toolbar>
+      <v-layout row wrap>
+        <v-flex xs12 text-xs-center pa-0 ma-0>
+          <v-system-bar window>
             <v-toolbar-items>
-              <v-btn>File</v-btn>
+              <v-menu offset-y>
+                <v-btn class="text" flat slot="activator">File</v-btn>
+                <v-list dense>
+                  <v-list-tile>
+                    <v-list-tile-title v-on:click="viewModel.State = 'open'">Open</v-list-tile-title>
+                  </v-list-tile>
+                </v-list>
+              </v-menu>
             </v-toolbar-items>
-          </v-toolbar>
+          </v-system-bar>
+        </v-flex>
+        <v-flex xs4 style="height: 500px; overflow-y: scroll" ma-2>
+          <v-treeview :items="viewModel.TreeNodes"
+            item-key="Name"
+            item-text="Name"
+            item-children="Children"
+            activatable
+            open-on-click
+            expand-icon>
+            <template slot="prepend" slot-scope="{ item, open, leaf }">
+              <v-icon v-if="!item.IsMilo" small color="primary">{{open ? 'fa-folder-open' : 'fa-folder'}}</v-icon>
+              <v-icon v-else small color="primary">{{fileIcons[item.Type] || 'fa-file'}}</v-icon>
+            </template>
+          </v-treeview>
         </v-flex>
       </v-layout>
     </v-content>
@@ -27,49 +48,55 @@
 </template>
 
 <script>
-const props={
-  viewModel: Object,
-  __window__: Object
-};
+  const props={
+    viewModel: Object,
+    __window__: Object
+  };
 
-export default {
-  name: 'app',
-  props,
-  data () {
-    return this.viewModel
+  export default {
+    name: 'app',
+    props,
+    data: function () {
+      return {
+        fileIcons: {
+          Tex: 'fa-file-image'
+        }
+      }
+    },
+    computed: {
+      //FilteredEntries: function
+    },
+    mounted: function () {
+
+    }
   }
-}
 </script>
 
+<style scoped>
+.text {
+  text-transform: none;
+}
+
+</style>
+
 <style>
-.app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-img {
-  height: 300px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
+  /* width */
+  ::-webkit-scrollbar {
+      width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+      background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+      background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+      background: #555; 
+  }
 </style>
