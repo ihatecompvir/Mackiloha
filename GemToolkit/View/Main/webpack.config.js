@@ -6,7 +6,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
 
@@ -72,6 +71,9 @@ var webpackOptions = {
     noInfo: true,
     overlay: true
   },
+  performance: {
+    hints: false
+  },
   resolve: {
     extensions: ['.js', '.vue', '.json', '.css', '.cjson'],
     alias: {
@@ -85,6 +87,9 @@ var webpackOptions = {
     new VuetifyLoaderPlugin()
   ],
   devtool: 'source-map',
+  stats: {
+    children: false
+  },
   optimization: {
     concatenateModules: true,
     splitChunks: {
@@ -121,12 +126,18 @@ switch (process.env.NODE_ENV) {
         filename: '[name].css',
         chunkFilename: '[name].css'
       }),
+      new OptimizeCssAssetsPlugin({
+        cssProcessor: require('cssnano'),
+        cssProcessorPluginOptions: {
+          preset: ['default', { discardComments: { removeAll: true } }],
+        },
+        canPrint: true
+      }),
       new webpack.LoaderOptionsPlugin({
         minimize: true
       })
     ])
     break
-
   case 'development':
     webpackOptions.output.publicPath = 'dist/'
 

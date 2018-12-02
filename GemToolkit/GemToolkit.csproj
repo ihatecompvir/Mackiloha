@@ -169,18 +169,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="View\Main\.gitignore" />
-    <Content Include="View\Main\dist\index.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Resource Include="View\Main\dist\logo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Content Include="View\Main\dist\main.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="View\Main\dist\main.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="View\Main\dist\index.html" />
+    <Resource Include="View\Main\dist\logo.png" />
+    <Resource Include="View\Main\dist\main.css" />
+    <Resource Include="View\Main\dist\main.js" />
     <Content Include="View\Main\index.html" />
     <Resource Include="View\Main\src\assets\logo.png" />
     <Content Include="View\Main\src\entry.js" />
