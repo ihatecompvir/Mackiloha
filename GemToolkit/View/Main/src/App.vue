@@ -1,5 +1,18 @@
 <template>
-  <div class="app">
+  <v-app dark>
+    <v-content app>
+      <v-layout>
+        <v-flex sm12 text-xs-center pa-0 ma-0>
+          <v-toolbar>
+            <v-toolbar-items>
+              <v-btn>File</v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+        </v-flex>
+      </v-layout>
+    </v-content>
+  </v-app>
+  <!--<div class="app">
     <img src="./assets/logo.png">
     <h1>{{Message}}</h1>
     <h2>Related Links</h2>
@@ -10,7 +23,7 @@
       <li><a target="_blank" href="https://github.com/NeutroniumCore/neutronium-vue">Neutronium Vue client</a></li>
       <li><a target="_blank" href="https://github.com/NeutroniumCore/Neutronium.Template/blob/master/README.md">Template documentation</a></li>
     </ul>
-  </div>
+  </div>-->
 </template>
 
 <script>

@@ -157,7 +157,7 @@
     <None Include="View\Main\package-lock.json" />
     <None Include="View\Main\package.json" />
     <None Include="View\Main\README.md" />
-    <None Include="View\Main\src\App.vue">
+    <None Include="View\Main\src\app.vue">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
