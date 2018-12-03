@@ -48,6 +48,7 @@
     "axios": "^0.18.0",
     "neutronium-vue-command-mixin": "^1.5.0",
     "neutronium-vue-simple-command-mixin": "^1.1.0",
+    "three": "^0.99.0",
     "vue": "^2.5.17",
     "vuetify": "^1.3.11",
     "vuex": "^3.0.1"

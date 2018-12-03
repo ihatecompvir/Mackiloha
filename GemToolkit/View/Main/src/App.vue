@@ -30,6 +30,9 @@
             </template>
           </v-treeview>
         </v-flex>
+        <v-flex xs8 ref="mainScene" >
+
+        </v-flex>
       </v-layout>
     </v-content>
   </v-app>
@@ -48,6 +51,10 @@
 </template>
 
 <script>
+  // ThreeJS
+  // TODO: Extract out to seperate component
+  import * as THREE from 'three'
+
   const props={
     viewModel: Object,
     __window__: Object
@@ -67,15 +74,54 @@
       //FilteredEntries: function
     },
     mounted: function () {
+      let scene = new THREE.Scene()
+      window.scene = scene // Allows ThreeJS extension to find view
 
+      let camera = new THREE.PerspectiveCamera(70, 1, 0.1, 1000)
+
+      let renderer = new THREE.WebGLRenderer()
+      renderer.setSize(500, 300)
+
+      let geometry = new THREE.BoxGeometry(1, 1, 1)
+      let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+      let cube = new THREE.Mesh(geometry, material)
+
+      scene.add(cube)
+      camera.position.z = 5
+
+      function animate() {
+	      requestAnimationFrame(animate)
+        renderer.render(scene, camera)
+
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+      }
+      
+      animate()
+
+      let textureLoader = new THREE.TextureLoader()
+      //let tex = textureLoader.load("https://www.transitionculture.org/wp-content/uploads/guitar-hero-1.jpg")
+      //console.log(tex)
+
+      //THREE.DefaultLoadingManager.
+
+
+      textureLoader.load("C:/Users/Cisco/Pictures/gamecube.jpg")
+
+      this.$refs.mainScene.appendChild(renderer.domElement)
     }
   }
 </script>
 
 <style scoped>
-.text {
-  text-transform: none;
-}
+  .text {
+    text-transform: none;
+  }
+
+  #mainScene > canvas {
+    width: 100%;
+    height: 100%;
+  }
 
 </style>
 
