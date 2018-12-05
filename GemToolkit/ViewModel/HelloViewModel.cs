@@ -1,8 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using Neutronium.MVVMComponents;
+using Neutronium.MVVMComponents.Relay;
 using Mackiloha;
+using Mackiloha.IO;
+using Mackiloha.Render;
+using GemToolkit.Extensions;
 
 namespace GemToolkit.ViewModel
 {
@@ -16,6 +22,31 @@ namespace GemToolkit.ViewModel
         public string MiloPath { get => _miloPath; set => Set(ref _miloPath, value, "MiloPath"); }
         public MiloObjectDir Milo { get; set; }
         public bool GroupByType { get => _groupByType; set { Set(ref _groupByType, value, "GroupByType"); CreateNodes(); } }
+
+        public HelloViewModel()
+        {
+            GetTexture = new RelayResultCommand<MiloNode, Texture>(node =>
+            {
+                if (!node.IsMilo) return null;
+
+                var entry = node.MiloBytes();
+                var serializer = new MiloSerializer(new SystemInfo() { BigEndian = false });
+                
+
+                using (var ms = new MemoryStream(entry.Data))
+                {
+                    var tex = serializer.ReadFromStream<Tex>(ms);
+                    var bytes = tex.Bitmap.ToRGBA();
+                    
+                    return new Texture()
+                    {
+                        Data = bytes,
+                        Width = tex.Bitmap.Width,
+                        Height = tex.Bitmap.Height
+                    };
+                }
+            });
+        }
 
         public ObservableCollection<TreeNode> TreeNodes { get; set; } = new ObservableCollection<TreeNode>();
         
@@ -60,5 +91,7 @@ namespace GemToolkit.ViewModel
                 foreach (var n in miloNodes) TreeNodes.Add(n);
             }
         }
+
+        public IResultCommand<MiloNode, Texture> GetTexture { get; set; }
     }
 }

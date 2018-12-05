@@ -18,19 +18,29 @@
         </v-flex>
         <v-flex xs4 style="height: 500px; overflow-y: scroll" ma-2>
           <v-treeview :items="viewModel.TreeNodes"
+            :active.sync="activeNodes"
+            :open.sync="openNodes"
             item-key="Name"
             item-text="Name"
             item-children="Children"
             activatable
-            open-on-click
-            expand-icon>
-            <template slot="prepend" slot-scope="{ item, open, leaf }">
+            hoverable
+            ref="treeView"
+            v-on:click="selectNode"
+            v-on:update:active="updateActive">
+            <template slot="prepend" slot-scope="{ active, indeterminate, item, leaf, open, selected }">
               <v-icon v-if="!item.IsMilo" small color="primary">{{open ? 'fa-folder-open' : 'fa-folder'}}</v-icon>
               <v-icon v-else small color="primary">{{fileIcons[item.Type] || 'fa-file'}}</v-icon>
             </template>
+            <template slot="append" slot-scope="{ active, indeterminate, item, leaf, open, selected }">
+
+            </template>
           </v-treeview>
         </v-flex>
-        <v-flex xs8 ref="mainScene" >
+        <v-flex xs8>
+          <strong v-if="activeNode">{{activeNode.Name}} ({{activeNode.Type}})</strong>
+        </v-flex>
+        <v-flex xs8 ref="mainScene" v-on:click="getTexture">
 
         </v-flex>
       </v-layout>
@@ -51,6 +61,8 @@
 </template>
 
 <script>
+  import { toPromise } from 'neutronium-vue-resultcommand-topromise'
+
   // ThreeJS
   // TODO: Extract out to seperate component
   import * as THREE from 'three'
@@ -66,49 +78,139 @@
     data: function () {
       return {
         fileIcons: {
-          Tex: 'fa-file-image'
-        }
+          Tex: 'fa-file-image',
+          View: 'fa-shapes',
+          Group: 'fa-shapes'
+        },
+        activeNodes: [],
+        openNodes: [],
+        activeNode: null
       }
     },
     computed: {
-      //FilteredEntries: function
+    },
+    methods: {
+      getTexture: function (texNode) {
+        console.log(texNode)
+
+        toPromise(this.viewModel.GetTexture, texNode)
+          .then((result) => {
+            this.createScene(result)
+
+            console.log(result)
+            console.log(typeof result)
+          }, (error) => {
+            console.log('error')
+          })
+        
+        //this.viewModel.GetTexture.Execute(node, result => console.log('what'))
+      },
+      selectNode: function (ev) {
+        console.log(ev)
+      },
+      updateActive: function (activeNodes) {
+        if (activeNodes.length <= 0) {
+          this.activeNode = null
+          return // TODO: Update displayed data?
+        }
+
+        if (this.viewModel.GroupByType) {
+
+          for (let node of this.viewModel.TreeNodes) {
+            for (let child of node.Children) {
+              if (child.Name == activeNodes[0]) {
+                this.activeNode = child
+                return
+              }
+            }
+          }
+
+          /*
+          this.viewModel.TreeNodes.forEach((node, idx) => {
+
+            node.Children.forEach((child, jdx) => {
+              let isActive = child.Name == activeNodes[0]
+
+              if (isActive) {
+
+                this.activeNode = child
+                return
+              }
+            })
+          })*/
+
+          this.activeNode = null
+        }
+
+        this.activeNode = null
+      },
+      createScene: function (tex) {
+        let scene = new THREE.Scene()
+        window.scene = scene // Allows ThreeJS extension to find view
+        
+        let camera = new THREE.PerspectiveCamera(70, 1, 0.1, 1000)
+        
+        let renderer = new THREE.WebGLRenderer()
+        renderer.setSize(500, 300)
+        
+        let geometry = new THREE.BoxGeometry(1, 1, 1)
+        let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+        let cube = new THREE.Mesh(geometry, material)
+
+        // From node
+        let texture = new THREE.DataTexture(new Uint8Array(tex.Data), tex.Width, tex.Height, THREE.RGBAFormat)
+        texture.needsUpdate = true
+        //scene.add(texture)
+
+        let spriteMat = new THREE.SpriteMaterial({ map: texture })
+        let sprite = new THREE.Sprite(spriteMat)
+        scene.add(sprite)
+
+        //scene.add(cube)
+        camera.position.z = 5
+        
+        function animate() {
+	        requestAnimationFrame(animate)
+          renderer.render(scene, camera)
+        
+          cube.rotation.x += 0.01;
+          cube.rotation.y += 0.01;
+        }
+        
+        animate()
+        
+        let textureLoader = new THREE.TextureLoader()
+        //let tex = textureLoader.load("https://www.transitionculture.org/wp-content/uploads/guitar-hero-1.jpg")
+        //console.log(tex)
+        
+        //THREE.DefaultLoadingManager.
+        
+        //textureLoader.load("C:/Users/Cisco/Pictures/gamecube.jpg")
+        
+        //let tex = new Uint8Array(256 * 3)
+        //let data = new THREE.DataTexture(tex, 8, 8, THREE.RGBFormat)
+        
+        //console.log(tex)
+        //console.log(data)
+        
+        this.$refs.mainScene.appendChild(renderer.domElement)
+      }
+    },
+    watch: {
+      activeNode: function (node) {
+        if (!node || !node.IsMilo) {
+          return
+        }
+
+        if (node.Type !== 'Tex') {
+          return
+        }
+
+        this.getTexture(node)
+      }
     },
     mounted: function () {
-      let scene = new THREE.Scene()
-      window.scene = scene // Allows ThreeJS extension to find view
-
-      let camera = new THREE.PerspectiveCamera(70, 1, 0.1, 1000)
-
-      let renderer = new THREE.WebGLRenderer()
-      renderer.setSize(500, 300)
-
-      let geometry = new THREE.BoxGeometry(1, 1, 1)
-      let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-      let cube = new THREE.Mesh(geometry, material)
-
-      scene.add(cube)
-      camera.position.z = 5
-
-      function animate() {
-	      requestAnimationFrame(animate)
-        renderer.render(scene, camera)
-
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-      }
-      
-      animate()
-
-      let textureLoader = new THREE.TextureLoader()
-      //let tex = textureLoader.load("https://www.transitionculture.org/wp-content/uploads/guitar-hero-1.jpg")
-      //console.log(tex)
-
-      //THREE.DefaultLoadingManager.
-
-
-      textureLoader.load("C:/Users/Cisco/Pictures/gamecube.jpg")
-
-      this.$refs.mainScene.appendChild(renderer.domElement)
+      //this.createScene()
     }
   }
 </script>

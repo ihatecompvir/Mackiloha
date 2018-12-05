@@ -31,7 +31,7 @@ namespace Mackiloha.IO
             switch (encoding)
             {
                 case 3:
-                    // Each color is 32 bits 
+                    // Each color is 32 bits
                     bytes += (bpp == 4 || bpp == 8) ? 1 << (bpp + 2) : 0;
                     break;
             }
