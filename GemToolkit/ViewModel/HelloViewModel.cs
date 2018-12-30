@@ -36,7 +36,7 @@ namespace GemToolkit.ViewModel
                 using (var ms = new MemoryStream(entry.Data))
                 {
                     var tex = serializer.ReadFromStream<Tex>(ms);
-                    var bytes = tex.Bitmap.ToRGBA();
+                    var bytes = tex.Bitmap.ToRGBA(serializer.Info);
                     
                     return new Texture()
                     {

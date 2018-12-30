@@ -16,7 +16,7 @@
             </v-toolbar-items>
           </v-system-bar>
         </v-flex>
-        <v-flex xs4 style="height: 500px; overflow-y: scroll" ma-2>
+        <v-flex xs4 style="height: 500px; overflow-y: scroll">
           <v-treeview :items="viewModel.TreeNodes"
             :active.sync="activeNodes"
             :open.sync="openNodes"
@@ -37,11 +37,11 @@
             </template>
           </v-treeview>
         </v-flex>
-        <v-flex xs8>
+        <!--<v-flex xs8>
           <strong v-if="activeNode">{{activeNode.Name}} ({{activeNode.Type}})</strong>
-        </v-flex>
+        </v-flex>-->
         <v-flex xs8 ref="mainScene" v-on:click="getTexture">
-
+          <canvas id="renderer" style="width: 100%; height: 100%; background-color: black"></canvas>
         </v-flex>
       </v-layout>
     </v-content>
@@ -149,9 +149,13 @@
         window.scene = scene // Allows ThreeJS extension to find view
         
         let camera = new THREE.PerspectiveCamera(70, 1, 0.1, 1000)
-        
-        let renderer = new THREE.WebGLRenderer()
-        renderer.setSize(500, 300)
+
+        let renderElm = document.getElementById('renderer')
+
+        let renderer = new THREE.WebGLRenderer({ canvas: renderElm })
+        renderer.domElement.id = 'renderer'
+
+        //renderer.setSize(500, 300)
         
         let geometry = new THREE.BoxGeometry(1, 1, 1)
         let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
