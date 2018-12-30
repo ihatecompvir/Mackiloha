@@ -30,7 +30,7 @@ namespace GemToolkit.ViewModel
                 if (!node.IsMilo) return null;
 
                 var entry = node.MiloBytes();
-                var serializer = new MiloSerializer(new SystemInfo() { BigEndian = false });
+                var serializer = new MiloSerializer(new SystemInfo() { BigEndian = false, Version = 10 }); // TODO: Pass serializer from somewhere
                 
 
                 using (var ms = new MemoryStream(entry.Data))

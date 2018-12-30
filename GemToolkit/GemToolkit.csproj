@@ -176,8 +176,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="View\Main\.gitignore" />
-    <Resource Include="View\Main\dist\index.html" />
-    <Resource Include="View\Main\dist\logo.png" />
     <Resource Include="View\Main\dist\main.css" />
     <Resource Include="View\Main\dist\main.js" />
     <Content Include="View\Main\index.html" />
