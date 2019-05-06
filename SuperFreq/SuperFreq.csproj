@@ -14,5 +14,12 @@
     <PackageReference Include="AdonisUI" Version="1.10.0" />
     <PackageReference Include="AdonisUI.ClassicTheme" Version="1.10.0" />
     <PackageReference Include="MahApps.Metro.IconPacks.FontAwesome" Version="2.3.0" />
+    <PackageReference Include="OpenTk" Version="3.0.1" />
+    <PackageReference Include="OpenTK.GLControl" Version="3.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
 </Project>

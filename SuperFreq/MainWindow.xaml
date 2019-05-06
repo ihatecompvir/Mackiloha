@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:openTK="clr-namespace:OpenTK;assembly=OpenTK"
         xmlns:local="clr-namespace:SuperFreq"
         mc:Ignorable="d"
         Title="SuperFreq" Height="450" Width="800"
@@ -140,9 +141,12 @@
                             <RowDefinition MinHeight="100" Height="*"/>
                         </Grid.RowDefinitions>
                         <!-- GL View -->
-                        <Grid Grid.Row="0">
-                            
+                        <Grid Background="Black">
+                            <WindowsFormsHost x:Name="WindowsFormsHost_OpenTK">
+                                
+                            </WindowsFormsHost>
                         </Grid>
+                        
                         <!-- Milo Explorer -->
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>

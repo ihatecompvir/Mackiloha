@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 
 namespace SuperFreq
 {
@@ -23,6 +26,12 @@ namespace SuperFreq
         public MainWindow()
         {
             InitializeComponent();
+
+            var glControl = new GLControl();
+            glControl.Dock = System.Windows.Forms.DockStyle.Fill;
+
+
+            WindowsFormsHost_OpenTK.Child = glControl;
         }
 
         private void ToolBar_Loaded(object sender, RoutedEventArgs e)
