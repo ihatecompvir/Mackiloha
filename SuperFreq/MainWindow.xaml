@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:HelixToolkit="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
         xmlns:local="clr-namespace:SuperFreq"
         mc:Ignorable="d"
         Title="SuperFreq" Height="450" Width="800"
@@ -141,7 +142,56 @@
                         </Grid.RowDefinitions>
                         <!-- GL View -->
                         <Grid Grid.Row="0">
-                            
+                            <HelixToolkit:HelixViewport3D ZoomExtentsWhenLoaded="True" Background="Black" Grid.Row="0" x:Name="HelixViewport3D" CameraMode="Inspect" ItemsSource="{Binding Models}">
+                                <HelixToolkit:HelixViewport3D.Resources>
+                                    <local:ModelConverter x:Key="modelConverter" />
+                                </HelixToolkit:HelixViewport3D.Resources>
+                                <HelixToolkit:HelixViewport3D.ItemTemplate>
+                                    <DataTemplate>
+                                        <ModelVisual3D>
+                                            <ModelVisual3D.Content>
+                                                <GeometryModel3D>
+                                                    <GeometryModel3D.Geometry>
+                                                        <MeshGeometry3D x:Name="meshMain"
+                                                                    Positions="{Binding Positions}"
+                                                                    TriangleIndices="{Binding Indices}">
+                                                        </MeshGeometry3D>
+                                                    </GeometryModel3D.Geometry>
+                                                    <GeometryModel3D.Material>
+                                                        <DiffuseMaterial x:Name="matDiffuseMain">
+                                                            <DiffuseMaterial.Brush>
+                                                                <SolidColorBrush Color="Gray"/>
+                                                            </DiffuseMaterial.Brush>
+                                                        </DiffuseMaterial>
+                                                    </GeometryModel3D.Material>
+                                                </GeometryModel3D>
+                                            </ModelVisual3D.Content>
+                                        </ModelVisual3D>
+                                    </DataTemplate>
+                                </HelixToolkit:HelixViewport3D.ItemTemplate>
+                                <!-- Remember to add light to the scene -->
+                                <HelixToolkit:DefaultLights/>
+                                <ModelVisual3D>
+                                    <ModelVisual3D.Content>
+                                        <GeometryModel3D>
+                                            <GeometryModel3D.Geometry>
+                                                <MeshGeometry3D x:Name="meshMain"
+                                                                Positions="{Binding Positions}"
+                                                                TriangleIndices="{Binding Indices}">
+                                                </MeshGeometry3D>
+                                            </GeometryModel3D.Geometry>
+                                            <GeometryModel3D.Material>
+                                                <DiffuseMaterial x:Name="matDiffuseMain">
+                                                    <DiffuseMaterial.Brush>
+                                                        <SolidColorBrush Color="Gray"/>
+                                                    </DiffuseMaterial.Brush>
+                                                </DiffuseMaterial>
+                                            </GeometryModel3D.Material>
+                                        </GeometryModel3D>
+                                    </ModelVisual3D.Content>
+                                </ModelVisual3D>
+                                <HelixToolkit:GridLinesVisual3D Width="8" Length="8" MinorDistance="1" MajorDistance="1" Thickness="0.01"/>
+                            </HelixToolkit:HelixViewport3D>
                         </Grid>
                         <!-- Milo Explorer -->
                         <Grid Grid.Row="1">
