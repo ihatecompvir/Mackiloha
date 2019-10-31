@@ -13,7 +13,7 @@ jobs:
         dotnet-version: 3.0.100
     - name: Build SuperFreq (Windows)
       working-directory: ./SuperFreq
-      run: dotnet build -c=Release --self-contained=false -r=win-x64
+      run: dotnet publish -c=Release --self-contained=false -r=win-x64
     - name: Build SuperFreq (Linux)
       working-directory: ./SuperFreq
-      run: dotnet build -c=Release --self-contained=false -r=linux-x64
+      run: dotnet publish -c=Release --self-contained=false -r=linux-x64
