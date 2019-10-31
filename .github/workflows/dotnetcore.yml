@@ -23,3 +23,11 @@ jobs:
       run: zip ./artifacts/superfreq_win_x64.zip ./SuperFreqCLI/bin/Release/netcoreapp3.0/win-x64/publish/*
     - name: Create archive for SuperFreq (Linux)
       run: zip ./artifacts/superfreq_linux_x64.zip ./SuperFreqCLI/bin/Release/netcoreapp3.0/linux-x64/publish/*
+    - name: Creates artifact for SuperFreq (Windows)
+      with:
+        name: superfreq_win_x64.zip
+        path: ./artifacts/superfreq_win_x64.zip
+    - name: Creates artifact for SuperFreq (Linux)
+      with:
+        name: superfreq_linux_x64.zip
+        path: ./artifacts/superfreq_linux_x64.zip
