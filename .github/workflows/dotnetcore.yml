@@ -12,8 +12,14 @@ jobs:
       with:
         dotnet-version: 3.0.100
     - name: Build SuperFreq (Windows)
-      working-directory: ./SuperFreq
+      working-directory: ./SuperFreqCLI
       run: dotnet publish -c=Release --self-contained=false -r=win-x64
     - name: Build SuperFreq (Linux)
-      working-directory: ./SuperFreq
+      working-directory: ./SuperFreqCLI
       run: dotnet publish -c=Release --self-contained=false -r=linux-x64
+    - name: Create artifacts directory
+      run: mkdir ./artifacts
+    - name: Create archive for SuperFreq (Windows)
+      run: zip ./artifacts/superfreq_win_x64.zip ./SuperFreqCLI/bin/Release/netcoreapp3.0/win-x64/publish/*
+    - name: Create archive for SuperFreq (Linux)
+      run: zip ./artifacts/superfreq_linux_x64.zip ./SuperFreqCLI/bin/Release/netcoreapp3.0/linux-x64/publish/*
