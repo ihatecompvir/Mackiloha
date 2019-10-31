@@ -4,15 +4,16 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.0.100
-    - name: Build SuperFreq with dotnet
+    - name: Build SuperFreq (Windows)
       working-directory: ./SuperFreq
-      run: -c=Release --self-contained=false
+      run: dotnet build -c=Release --self-contained=false -r=win-x64
+    - name: Build SuperFreq (Linux)
+      working-directory: ./SuperFreq
+      run: dotnet build -c=Release --self-contained=false -r=linux-x64
