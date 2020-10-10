@@ -1,5 +1,6 @@
 ﻿using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
+using SceneManager.Scene;
 using System;
 
 namespace SceneManager
@@ -8,6 +9,11 @@ namespace SceneManager
     {
         static void Main(string[] args)
         {
+            // Load ark and milo
+            var man = new MiloManager();
+            man.LoadArk(args[0]);
+            man.LoadMilo(args[1]);
+
             var gameSettings = GameWindowSettings.Default;
             var nativeSettings = NativeWindowSettings.Default;
 
