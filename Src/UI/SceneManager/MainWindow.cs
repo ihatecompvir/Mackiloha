@@ -1,5 +1,4 @@
-﻿using ImGuiNET;
-using OpenTK;
+﻿using OpenTK;
 using OpenTK.Core;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -45,8 +44,6 @@ namespace SceneManager
 
             GL.ClearColor(Color.CornflowerBlue);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
-
-            ImGui.ShowDemoWindow();
 
             Overlay.Render();
 
