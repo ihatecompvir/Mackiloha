@@ -1,5 +1,5 @@
 ﻿using Mackiloha;
-using Mackiloha.App;
+using Mackiloha.App.Extensions;
 using Mackiloha.Ark;
 using Mackiloha.IO;
 using Mackiloha.Milo2;
@@ -47,27 +47,20 @@ namespace SceneManager.Scene
                 milo = serializer.ReadFromStream<MiloObjectDir>(miloStream);
             }
 
-            var groupEntry = milo.Entries.First(x => x.Type == "Group");
-            View group;
+            var groups = milo.Entries
+                .Where(x => "Group".Equals(x.Type))
+                .Select(y => serializer.ReadFromMiloObjectBytes<Group>(y as MiloObjectBytes))
+                .ToList();
 
-            using (var groupStream = new MemoryStream((groupEntry as MiloObjectBytes).Data))
-            {
-                group = serializer.ReadFromStream<View>(groupStream);
-            }
+            var meshes = milo.Entries
+                .Where(x => "Mesh".Equals(x.Type))
+                .Select(y => serializer.ReadFromMiloObjectBytes<Mesh>(y as MiloObjectBytes))
+                .ToList();
 
-            var meshes = new List<Mesh>();
-            foreach (var meshName in group.Drawables)
-            {
-                var meshEntry = milo.Entries.First(x => x.Name == meshName);
-                Mesh mesh;
-
-                using (var meshStream = new MemoryStream((meshEntry as MiloObjectBytes).Data))
-                {
-                    mesh = serializer.ReadFromStream<Mesh>(meshStream);
-                }
-
-                meshes.Add(mesh);
-            }
+            var textures = milo.Entries
+                .Where(x => "Tex".Equals(x.Type))
+                .Select(y => serializer.ReadFromMiloObjectBytes<Tex>(y as MiloObjectBytes))
+                .ToList();
         }
 
         protected SystemInfo GetSystemInfo(string miloPath, MiloFile miloFile)
